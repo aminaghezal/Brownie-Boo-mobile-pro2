@@ -1,0 +1,321 @@
+/* ============================================================
+   BROWNIE BOO — Design Tokens & Semantic Styles
+   Source: aminaghezal/Brownie-Boo (branch: index)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@400;500;600;700;800&display=swap');
+
+/* ──────────────────────────────────────────
+   BASE COLOR TOKENS
+────────────────────────────────────────── */
+:root {
+  /* Brand browns */
+  --bb-brown-black:   #020100;   /* near-black — body text */
+  --bb-brown:         #8B4513;   /* saddle brown — headings, borders */
+  --bb-brown-dark:    #654321;   /* deep brown — footer bg gradient end */
+  --bb-brown-mid:     #5C3A0D;   /* illustration stroke color */
+  --bb-light-brown:   #ddcdb9;   /* muted borders, dividers */
+  --bb-tan:           #D2B48C;   /* decorative accents */
+
+  /* Primary accent */
+  --bb-orange:        #FF8C00;   /* primary CTA, icons, focus rings */
+  --bb-orange-dark:   #e67e00;   /* hover / gradient end */
+
+  /* Highlight */
+  --bb-yellow:        #edfd0b;   /* "Popular" badge background */
+
+  /* Backgrounds */
+  --bb-cream:         #FFF8DC;   /* main page background */
+  --bb-cream-light:   #FFFEF7;   /* gradient end of background */
+  --bb-white:         #FFFFFF;   /* card surfaces, inputs */
+
+  /* Functional */
+  --bb-green:         #32CD32;   /* party/success accent */
+  --bb-gold:          #FFD700;   /* special/premium accent */
+
+  /* Shadows */
+  --bb-shadow:        rgba(139, 69, 19, 0.10);
+  --bb-shadow-hover:  rgba(139, 69, 19, 0.20);
+  --bb-shadow-orange: rgba(255, 140, 0,  0.30);
+
+  /* Gradients */
+  --bb-gradient-orange:  linear-gradient(135deg, #FF8C00 0%, #e67e00 100%);
+  --bb-gradient-brown:   linear-gradient(135deg, #020100 0%, #654321 100%);
+  --bb-gradient-cream:   linear-gradient(135deg, #FFF8DC 0%, #FFFEF7 100%);
+  --bb-gradient-warm:    linear-gradient(135deg, rgba(255,140,0,.05), rgba(139,69,19,.05));
+
+  /* ──────────────────────────────────────────
+     BASE TYPE TOKENS
+  ────────────────────────────────────────── */
+  --bb-font-display: 'Playfair Display', Georgia, serif;
+  /* ⚠ Substitution: codebase uses generic `cursive`; nearest Google Font match is Playfair Display.
+       Supply original font files to update. */
+  --bb-font-body:    'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  --bb-size-xs:    0.75rem;   /* 12px */
+  --bb-size-sm:    0.875rem;  /* 14px */
+  --bb-size-base:  1rem;      /* 16px */
+  --bb-size-md:    1.1rem;    /* ~18px */
+  --bb-size-lg:    1.3rem;    /* ~21px */
+  --bb-size-xl:    1.5rem;    /* 24px */
+  --bb-size-2xl:   2rem;      /* 32px */
+  --bb-size-3xl:   2.5rem;    /* 40px */
+  --bb-size-4xl:   3.5rem;    /* 56px */
+  --bb-size-5xl:   4rem;      /* 64px */
+
+  --bb-weight-normal:    400;
+  --bb-weight-medium:    500;
+  --bb-weight-semibold:  600;
+  --bb-weight-bold:      700;
+  --bb-weight-extrabold: 800;
+  --bb-weight-black:     900;
+
+  --bb-leading-tight:  1.1;
+  --bb-leading-snug:   1.2;
+  --bb-leading-normal: 1.6;
+  --bb-leading-relaxed:1.7;
+
+  /* ──────────────────────────────────────────
+     SPACING TOKENS
+  ────────────────────────────────────────── */
+  --bb-space-1:   0.25rem;   /* 4px */
+  --bb-space-2:   0.5rem;    /* 8px */
+  --bb-space-3:   0.75rem;   /* 12px */
+  --bb-space-4:   1rem;      /* 16px */
+  --bb-space-5:   1.25rem;   /* 20px */
+  --bb-space-6:   1.5rem;    /* 24px */
+  --bb-space-8:   2rem;      /* 32px */
+  --bb-space-10:  2.5rem;    /* 40px */
+  --bb-space-12:  3rem;      /* 48px */
+  --bb-space-16:  4rem;      /* 64px */
+  --bb-space-24:  6rem;      /* 96px — section padding */
+
+  /* ──────────────────────────────────────────
+     BORDER RADIUS TOKENS
+  ────────────────────────────────────────── */
+  --bb-radius-sm:   8px;    /* small buttons, tags */
+  --bb-radius-md:   10px;   /* inputs */
+  --bb-radius-btn:  12px;   /* standard button */
+  --bb-radius-btn-lg: 15px; /* large button */
+  --bb-radius-pill: 25px;   /* badges, pills */
+  --bb-radius-card: 1.5rem; /* 24px — cards */
+  --bb-radius-card-lg: 2rem;/* 32px — large cards */
+  --bb-radius-full: 9999px; /* circles */
+
+  /* ──────────────────────────────────────────
+     SHADOW TOKENS
+  ────────────────────────────────────────── */
+  --bb-elevation-1: 0 4px  15px var(--bb-shadow);
+  --bb-elevation-2: 0 10px 30px var(--bb-shadow);
+  --bb-elevation-3: 0 20px 40px var(--bb-shadow-hover);
+  --bb-elevation-orange: 0 4px 15px var(--bb-shadow-orange);
+  --bb-elevation-orange-lg: 0 8px 25px var(--bb-shadow-orange);
+}
+
+/* ──────────────────────────────────────────
+   SEMANTIC ELEMENT STYLES
+────────────────────────────────────────── */
+
+body {
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-size-base);
+  font-weight: var(--bb-weight-normal);
+  line-height: var(--bb-leading-normal);
+  color: var(--bb-brown-black);
+  background: var(--bb-gradient-cream);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--bb-font-display);
+  color: var(--bb-brown);
+  line-height: var(--bb-leading-tight);
+  font-weight: var(--bb-weight-bold);
+}
+
+/* Hero title — used in landing page h2.hero-title */
+.bb-h1 {
+  font-family: var(--bb-font-display);
+  font-size: var(--bb-size-5xl);
+  font-weight: var(--bb-weight-black);
+  line-height: var(--bb-leading-tight);
+  color: var(--bb-brown);
+}
+
+/* Section heading — h3 in sections */
+.bb-h2 {
+  font-family: var(--bb-font-display);
+  font-size: var(--bb-size-3xl);
+  font-weight: var(--bb-weight-bold);
+  line-height: var(--bb-leading-snug);
+  color: var(--bb-brown);
+}
+
+/* Card / subsection heading — h4 */
+.bb-h3 {
+  font-family: var(--bb-font-display);
+  font-size: var(--bb-size-xl);
+  font-weight: var(--bb-weight-bold);
+  line-height: var(--bb-leading-snug);
+  color: var(--bb-brown);
+}
+
+/* Body copy */
+.bb-body {
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-size-base);
+  line-height: var(--bb-leading-normal);
+  color: var(--bb-brown-black);
+}
+
+/* Muted body / card description */
+.bb-body-muted {
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-size-base);
+  line-height: var(--bb-leading-normal);
+  color: rgba(139, 69, 19, 0.7);
+}
+
+/* Large body / hero description */
+.bb-body-lg {
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-size-lg);
+  line-height: var(--bb-leading-relaxed);
+  color: rgba(139, 69, 19, 0.8);
+}
+
+/* Nav / label text */
+.bb-label {
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-size-md);
+  font-weight: var(--bb-weight-semibold);
+  color: var(--bb-brown);
+}
+
+/* Small badge / caption text */
+.bb-caption {
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-size-xs);
+  font-weight: var(--bb-weight-semibold);
+  letter-spacing: 0.03em;
+  color: var(--bb-brown);
+}
+
+/* Orange accent text (gradient) */
+.bb-text-accent {
+  background: var(--bb-gradient-orange);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ──────────────────────────────────────────
+   UTILITY CLASSES
+────────────────────────────────────────── */
+
+.bb-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Buttons */
+.bb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bb-space-2);
+  padding: var(--bb-space-3) var(--bb-space-6);
+  border: none;
+  border-radius: var(--bb-radius-btn);
+  font-family: var(--bb-font-body);
+  font-weight: var(--bb-weight-semibold);
+  font-size: var(--bb-size-base);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.bb-btn-primary {
+  background: var(--bb-gradient-orange);
+  color: var(--bb-white);
+  box-shadow: var(--bb-elevation-orange);
+}
+.bb-btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--bb-elevation-orange-lg);
+}
+
+.bb-btn-outline {
+  background: transparent;
+  color: var(--bb-brown);
+  border: 2px solid var(--bb-brown);
+}
+.bb-btn-outline:hover {
+  background: var(--bb-gradient-brown);
+  color: var(--bb-white);
+  transform: translateY(-3px);
+}
+
+.bb-btn-lg {
+  padding: var(--bb-space-5) var(--bb-space-10);
+  font-size: 1.2rem;
+  border-radius: var(--bb-radius-btn-lg);
+}
+
+/* Cards */
+.bb-card {
+  background: var(--bb-white);
+  border-radius: var(--bb-radius-card);
+  box-shadow: var(--bb-elevation-2);
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+.bb-card:hover {
+  transform: translateY(-10px);
+  box-shadow: var(--bb-elevation-3);
+}
+
+/* Badges / pills */
+.bb-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bb-space-2);
+  padding: var(--bb-space-2) var(--bb-space-4);
+  border-radius: var(--bb-radius-pill);
+  font-family: var(--bb-font-body);
+  font-weight: var(--bb-weight-semibold);
+  font-size: var(--bb-size-sm);
+}
+
+.bb-badge-orange {
+  background: rgba(255, 140, 0, 0.15);
+  color: var(--bb-orange);
+  border: 1px solid rgba(255, 140, 0, 0.3);
+}
+
+.bb-badge-brown {
+  background: rgba(139, 69, 19, 0.1);
+  color: var(--bb-brown);
+  border: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.bb-badge-yellow {
+  background: var(--bb-yellow);
+  color: var(--bb-brown);
+}
+
+/* Form inputs */
+.bb-input {
+  padding: var(--bb-space-4);
+  border: 2px solid rgba(139, 69, 19, 0.2);
+  border-radius: var(--bb-radius-md);
+  font-family: var(--bb-font-body);
+  font-size: var(--bb-size-base);
+  background: var(--bb-white);
+  transition: all 0.3s ease;
+  width: 100%;
+}
+.bb-input:focus {
+  outline: none;
+  border-color: var(--bb-orange);
+  box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
