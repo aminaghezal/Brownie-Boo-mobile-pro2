@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brownie Boo — Mobile UI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="ios-frame.jsx"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: linear-gradient(160deg, #3d1a08 0%, #7a3a10 50%, #c47a30 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; font-family: 'Nunito', sans-serif; }
+
+    /* Mobile app scroll container */
+    .app-scroll { width: 100%; height: 100%; overflow-y: auto; overflow-x: hidden; background: #FFF8DC; position: relative; }
+    .app-scroll::-webkit-scrollbar { display: none; }
+
+    /* Screen transitions */
+    .screen { width: 100%; min-height: 100%; animation: screenIn .3s ease-out; }
+    @keyframes screenIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: translateX(0); } }
+    .screen-back { animation: screenInBack .3s ease-out; }
+    @keyframes screenInBack { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: translateX(0); } }
+
+    /* Bottom nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.97); backdrop-filter: blur(12px); border-top: 1px solid rgba(139,69,19,.1); display: flex; z-index: 100; padding-bottom: 20px; }
+    .nav-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 0 4px; gap: 3px; cursor: pointer; border: none; background: none; transition: all .2s; }
+    .nav-item .icon { font-size: 20px; color: #ddcdb9; transition: color .2s; }
+    .nav-item .nav-label { font-family: 'Nunito', sans-serif; font-size: 10px; font-weight: 700; color: #ddcdb9; transition: color .2s; }
+    .nav-item.active .icon, .nav-item.active .nav-label { color: #FF8C00; }
+    .nav-item.active .icon { transform: translateY(-2px); }
+
+    /* Common */
+    .page-pad { padding: 0 16px; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #8B4513; }
+
+    /* Pill tabs */
+    .pill-tabs { display: flex; gap: 8px; overflow-x: auto; padding: 0 16px; scrollbar-width: none; }
+    .pill-tabs::-webkit-scrollbar { display: none; }
+    .pill { padding: 7px 16px; border-radius: 20px; font-family: 'Nunito',sans-serif; font-size: 13px; font-weight: 700; border: none; cursor: pointer; white-space: nowrap; transition: all .2s; flex-shrink: 0; }
+    .pill.active { background: linear-gradient(135deg,#FF8C00,#e67e00); color: #fff; box-shadow: 0 4px 12px rgba(255,140,0,.35); }
+    .pill.inactive { background: rgba(139,69,19,.08); color: #8B4513; }
+
+    /* Cards */
+    .flavour-card-mobile { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 6px 20px rgba(139,69,19,.1); transition: all .25s; active-transform: scale(.97); }
+    .qty-btn { width: 32px; height: 32px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; font-weight: 700; transition: transform .15s; }
+    .qty-btn:active { transform: scale(.88); }
+
+    /* Cart badge */
+    .cart-badge { position: absolute; top: -4px; right: -4px; background: #FF8C00; color: #fff; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+
+    /* Buttons */
+    .bb-btn-full { width: 100%; padding: 15px; border: none; border-radius: 14px; background: linear-gradient(135deg,#FF8C00,#e67e00); color: #fff; font-family: 'Nunito',sans-serif; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 6px 18px rgba(255,140,0,.35); transition: all .2s; }
+    .bb-btn-full:active { transform: scale(.97); }
+    .bb-btn-full:disabled { background: #ddcdb9; color: #b08060; box-shadow: none; cursor: not-allowed; }
+
+    /* Floating cart */
+    .floating-cart { position: fixed; bottom: 80px; left: 16px; right: 16px; background: linear-gradient(135deg,#8B4513,#654321); color: #FFF8DC; border-radius: 18px; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 8px 28px rgba(139,69,19,.35); cursor: pointer; transition: all .25s; z-index: 90; }
+    .floating-cart:active { transform: scale(.98); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    /* ─── DATA ─── */
+    const FLAVOURS = [
+      { id: 'classic',  name: 'Classic Chocolate', short: 'Classic',   img: '../../assets/brownie-classic.jpg', tag: 'bestseller' },
+      { id: 'caramel',  name: 'Salted Caramel',     short: 'Caramel',   img: '../../assets/brownie-caramel.jpg', tag: 'popular' },
+      { id: 'walnut',   name: 'Walnut Crunch',       short: 'Walnut',    img: '../../assets/brownie-walnut.jpg',  tag: null },
+      { id: 'double',   name: 'Double Chocolate',    short: 'Double',    img: '../../assets/brownie-double.jpg',  tag: 'popular' },
+      { id: 'bueno',    name: 'Bueno',               short: 'Bueno',     img: '../../assets/brownie-bueno.jpg',   tag: null },
+      { id: 'oreo',     name: 'Oreo',                short: 'Oreo',      img: '../../assets/brownie-oreo.jpg',    tag: null },
+    ];
+
+    const BOXES = [
+      { id: 'classic-box', name: 'Classic Box', count: '6 pieces', img: '../../assets/box-classic.jpg', desc: 'Mix 6 of your favourite flavours' },
+      { id: 'party',       name: 'Party Pack',  count: '30+ pieces', img: '../../assets/box-party.jpg', desc: 'Perfect for events & celebrations' },
+      { id: 'special',     name: 'Special Box', count: '1 big piece', img: '../../assets/box-special.jpg', desc: 'Premium gift for special occasions', featured: true },
+    ];
+
+    /* ─── HOME SCREEN ─── */
+    const HomeScreen = ({ onNav }) => {
+      return React.createElement('div', { className: 'screen', style: { paddingBottom: 80 } },
+        // Hero
+        React.createElement('div', { style: { position: 'relative', height: 280, overflow: 'hidden' } },
+          React.createElement('img', { src: '../../assets/hero-brownies.png', alt: 'Brownies', style: { width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center top', display: 'block' } }),
+          React.createElement('div', { style: { position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(139,69,19,.1) 0%, rgba(101,67,33,.75) 100%)' } }),
+          React.createElement('div', { style: { position: 'absolute', bottom: 0, left: 0, right: 0, padding: '20px 20px 24px' } },
+            React.createElement('div', { style: { display: 'inline-flex', alignItems: 'center', gap: 5, background: 'rgba(255,140,0,.9)', color: '#fff', padding: '4px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, fontFamily: "'Nunito',sans-serif", marginBottom: 8 } },
+              React.createElement('i', { className: 'fas fa-sparkles', style: { fontSize: 9 } }), ' Handcrafted with Love'
+            ),
+            React.createElement('h1', { style: { fontFamily: "'Playfair Display',serif", fontSize: 28, fontWeight: 900, color: '#fff', lineHeight: 1.15, marginBottom: 12 } },
+              'Indulge in\nOur ', React.createElement('span', { style: { color: '#FFBD59' } }, 'Premium\nBrownies')
+            ),
+            React.createElement('button', { className: 'bb-btn-full', style: { padding: '12px', fontSize: 15 }, onClick: () => onNav('choose') },
+              React.createElement('i', { className: 'fas fa-heart', style: { marginRight: 8 } }), 'Make an Order'
+            )
+          )
+        ),
+
+        // Rating strip
+        React.createElement('div', { style: { display: 'flex', justifyContent: 'space-around', background: '#fff', padding: '14px 16px', borderBottom: '1px solid rgba(139,69,19,.08)' } },
+          [['5.0', 'Rating', 'fas fa-star'], ['100%', 'Fresh Daily', 'fas fa-heart'], ['6+', 'Flavours', 'fas fa-sparkles']].map(([n, l, ic]) =>
+            React.createElement('div', { key: l, style: { textAlign: 'center' } },
+              React.createElement('i', { className: ic, style: { color: '#FF8C00', fontSize: 12, display: 'block', marginBottom: 2 } }),
+              React.createElement('div', { style: { fontFamily: "'Playfair Display',serif", fontSize: 18, fontWeight: 700, color: '#8B4513' } }, n),
+              React.createElement('div', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 11, color: 'rgba(139,69,19,.6)', fontWeight: 600 } }, l)
+            )
+          )
+        ),
+
+        // Signature flavours
+        React.createElement('div', { style: { padding: '22px 0 0' } },
+          React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 16px', marginBottom: 14 } },
+            React.createElement('span', { className: 'section-title' }, 'Signature Flavours'),
+            React.createElement('span', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 13, fontWeight: 700, color: '#FF8C00', cursor: 'pointer' }, onClick: () => onNav('flavours') }, 'See all →')
+          ),
+          React.createElement('div', { style: { display: 'flex', gap: 12, overflowX: 'auto', padding: '0 16px 4px', scrollbarWidth: 'none' } },
+            FLAVOURS.slice(0, 4).map(f =>
+              React.createElement('div', { key: f.id, style: { flexShrink: 0, width: 130, background: '#fff', borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 14px rgba(139,69,19,.1)' } },
+                React.createElement('div', { style: { position: 'relative', height: 100 } },
+                  React.createElement('img', { src: f.img, alt: f.name, style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' } }),
+                  f.tag && React.createElement('div', { style: { position: 'absolute', top: 7, left: 7, background: '#edfd0b', color: '#8B4513', fontSize: 9, fontWeight: 800, padding: '3px 8px', borderRadius: 10, fontFamily: "'Nunito',sans-serif", textTransform: 'uppercase' } }, f.tag)
+                ),
+                React.createElement('div', { style: { padding: '9px 10px 11px' } },
+                  React.createElement('p', { style: { fontFamily: "'Playfair Display',serif", fontSize: 13, fontWeight: 700, color: '#8B4513', margin: 0 } }, f.short)
+                )
+              )
+            )
+          )
+        ),
+
+        // Bear illustration strip
+        React.createElement('div', { style: { margin: '20px 16px 0', background: 'linear-gradient(135deg,#8B4513,#654321)', borderRadius: 20, padding: '20px', display: 'flex', alignItems: 'center', gap: 16, overflow: 'hidden', position: 'relative' } },
+          React.createElement('img', { src: '../../assets/illustration-bear-chef.png', alt: 'Bear chef', style: { width: 80, height: 80, objectFit: 'contain', flexShrink: 0 } }),
+          React.createElement('div', null,
+            React.createElement('p', { style: { fontFamily: "'Playfair Display',serif", color: '#FFF8DC', fontSize: 17, fontWeight: 700, marginBottom: 6, lineHeight: 1.2 } }, 'Made fresh,\nwith love'),
+            React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", color: 'rgba(255,248,220,.75)', fontSize: 12, lineHeight: 1.5 } }, 'Small batches, premium ingredients')
+          )
+        ),
+
+        // Our boxes
+        React.createElement('div', { style: { padding: '22px 0 0' } },
+          React.createElement('p', { className: 'section-title', style: { padding: '0 16px', marginBottom: 14 } }, 'Our Boxes'),
+          React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: 12, padding: '0 16px' } },
+            BOXES.map(box => React.createElement(BoxCardCompact, { key: box.id, box, onClick: () => onNav('choose') }))
+          )
+        )
+      );
+    };
+
+    const BoxCardCompact = ({ box, onClick }) => {
+      const [hov, setHov] = React.useState(false);
+      return React.createElement('div', {
+        onClick,
+        onTouchStart: () => setHov(true), onTouchEnd: () => setHov(false),
+        style: { background: '#fff', borderRadius: 16, display: 'flex', alignItems: 'center', gap: 14, padding: 12, boxShadow: '0 4px 14px rgba(139,69,19,.1)', transform: hov ? 'scale(.98)' : 'none', transition: 'transform .15s', cursor: 'pointer', position: 'relative', border: box.featured ? '2px solid rgba(255,140,0,.4)' : '2px solid transparent' }
+      },
+        box.featured && React.createElement('div', { style: { position: 'absolute', top: -8, right: 12, background: 'linear-gradient(135deg,#FF8C00,#e67e00)', color: '#fff', fontSize: 9, fontWeight: 800, padding: '3px 8px', borderRadius: 10, fontFamily: "'Nunito',sans-serif", textTransform: 'uppercase' } }, '⭐ Popular'),
+        React.createElement('img', { src: box.img, alt: box.name, style: { width: 64, height: 64, objectFit: 'cover', borderRadius: 12, flexShrink: 0 } }),
+        React.createElement('div', { style: { flex: 1 } },
+          React.createElement('p', { style: { fontFamily: "'Playfair Display',serif", fontSize: 16, fontWeight: 700, color: '#8B4513', margin: '0 0 2px' } }, box.name),
+          React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 12, color: '#FF8C00', fontWeight: 700, margin: '0 0 3px' } }, box.count),
+          React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 12, color: 'rgba(139,69,19,.65)', margin: 0, lineHeight: 1.4 } }, box.desc)
+        ),
+        React.createElement('i', { className: 'fas fa-chevron-right', style: { color: '#ddcdb9', fontSize: 14 } })
+      );
+    };
+
+    /* ─── FLAVOURS SCREEN ─── */
+    const FlavoursScreen = ({ quantities, onAddRemove }) => {
+      const [filter, setFilter] = React.useState('all');
+      const tabs = [['all', 'All'], ['bestseller', 'Bestsellers'], ['popular', 'Popular']];
+      const shown = filter === 'all' ? FLAVOURS : FLAVOURS.filter(f => f.tag === filter);
+
+      return React.createElement('div', { className: 'screen', style: { paddingBottom: 80 } },
+        // Header
+        React.createElement('div', { style: { background: 'linear-gradient(135deg,#FFF8DC,#FFFEF7)', padding: '20px 16px 0' } },
+          React.createElement('h2', { className: 'section-title', style: { fontSize: 26, marginBottom: 6 } }, 'Our Flavours'),
+          React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 14, color: 'rgba(139,69,19,.65)', marginBottom: 16 } }, 'All made fresh, handcrafted daily'),
+          React.createElement('div', { className: 'pill-tabs', style: { padding: 0, marginBottom: 18 } },
+            tabs.map(([v, l]) =>
+              React.createElement('button', { key: v, className: `pill ${filter === v ? 'active' : 'inactive'}`, onClick: () => setFilter(v) }, l)
+            )
+          )
+        ),
+        React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, padding: '16px 16px 16px' } },
+          shown.map(f =>
+            React.createElement('div', { key: f.id, className: 'flavour-card-mobile' },
+              React.createElement('div', { style: { position: 'relative', height: 130 } },
+                React.createElement('img', { src: f.img, alt: f.name, style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' } }),
+                f.tag && React.createElement('div', { style: { position: 'absolute', top: 8, left: 8, background: '#edfd0b', color: '#8B4513', fontSize: 9, fontWeight: 800, padding: '3px 9px', borderRadius: 12, fontFamily: "'Nunito',sans-serif", textTransform: 'uppercase' } }, f.tag)
+              ),
+              React.createElement('div', { style: { padding: '11px 12px 14px' } },
+                React.createElement('p', { style: { fontFamily: "'Playfair Display',serif", fontSize: 14, fontWeight: 700, color: '#8B4513', margin: '0 0 10px', lineHeight: 1.2 } }, f.name),
+                React.createElement('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
+                  React.createElement('button', { className: 'qty-btn', onClick: () => onAddRemove(f.id, -1), disabled: !(quantities[f.id] > 0), style: { background: quantities[f.id] > 0 ? 'rgba(255,140,0,.12)' : 'rgba(139,69,19,.06)', color: quantities[f.id] > 0 ? '#FF8C00' : '#ccc' } }, '−'),
+                  React.createElement('span', { style: { fontFamily: "'Nunito',sans-serif", fontWeight: 800, fontSize: 18, color: '#8B4513', minWidth: 24, textAlign: 'center' } }, quantities[f.id] || 0),
+                  React.createElement('button', { className: 'qty-btn', onClick: () => onAddRemove(f.id, 1), style: { background: 'linear-gradient(135deg,#FF8C00,#e67e00)', color: '#fff' } }, '+')
+                )
+              )
+            )
+          )
+        )
+      );
+    };
+
+    /* ─── CHOOSE SCREEN ─── */
+    const ChooseScreen = ({ onNav }) => {
+      return React.createElement('div', { className: 'screen', style: { paddingBottom: 80 } },
+        React.createElement('div', { style: { background: 'linear-gradient(135deg,#FFF8DC,#FFFEF7)', padding: '22px 16px 18px' } },
+          React.createElement('h2', { className: 'section-title', style: { fontSize: 26, marginBottom: 4 } }, 'Choose Your Box'),
+          React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 14, color: 'rgba(139,69,19,.65)' } }, 'Pick the box that suits you best')
+        ),
+        React.createElement('div', { style: { display: 'flex', flexDirection: 'column', gap: 16, padding: '16px' } },
+          BOXES.map(box =>
+            React.createElement('div', { key: box.id, onClick: () => onNav('order'), style: { background: '#fff', borderRadius: 22, overflow: 'hidden', boxShadow: '0 8px 24px rgba(139,69,19,.12)', cursor: 'pointer', border: box.featured ? '2px solid rgba(255,140,0,.5)' : '2px solid transparent', position: 'relative' } },
+              box.featured && React.createElement('div', { style: { background: 'linear-gradient(135deg,#FF8C00,#e67e00)', color: '#fff', textAlign: 'center', padding: '7px', fontSize: 12, fontWeight: 800, fontFamily: "'Nunito',sans-serif", letterSpacing: '.04em' } }, '⭐ Most Popular'),
+              React.createElement('div', { style: { height: 180, overflow: 'hidden' } },
+                React.createElement('img', { src: box.img, alt: box.name, style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' } })
+              ),
+              React.createElement('div', { style: { padding: '18px 18px 20px' } },
+                React.createElement('div', { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 } },
+                  React.createElement('div', null,
+                    React.createElement('h3', { style: { fontFamily: "'Playfair Display',serif", fontSize: 20, fontWeight: 700, color: '#8B4513', margin: '0 0 3px' } }, box.name),
+                    React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 13, color: '#FF8C00', fontWeight: 700, margin: 0 } }, box.count)
+                  ),
+                  React.createElement('div', { style: { background: 'linear-gradient(135deg,#FF8C00,#e67e00)', color: '#fff', width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 } },
+                    React.createElement('i', { className: 'fas fa-arrow-right', style: { fontSize: 14 } })
+                  )
+                ),
+                React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 14, color: 'rgba(139,69,19,.7)', margin: 0, lineHeight: 1.5 } }, box.desc)
+              )
+            )
+          )
+        )
+      );
+    };
+
+    /* ─── ORDER SCREEN ─── */
+    const BOX_SIZE = 6;
+    const OrderScreen = ({ quantities, onAddRemove, onNav }) => {
+      const [submitted, setSubmitted] = React.useState(false);
+      const total = Object.values(quantities).reduce((s, v) => s + v, 0);
+      const remaining = BOX_SIZE - total;
+      const cartItems = FLAVOURS.filter(f => quantities[f.id] > 0);
+
+      if (submitted) return React.createElement('div', { style: { minHeight: '100vh', background: 'linear-gradient(135deg,#FFF8DC,#FFFEF7)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 32, textAlign: 'center' } },
+        React.createElement('img', { src: '../../assets/illustration-bear-box.png', alt: 'Bear', style: { width: 140, height: 140, objectFit: 'contain', marginBottom: 8 } }),
+        React.createElement('h2', { style: { fontFamily: "'Playfair Display',serif", color: '#8B4513', fontSize: 28, margin: '0 0 10px' } }, 'Order Received!'),
+        React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", color: 'rgba(139,69,19,.7)', fontSize: 15, marginBottom: 28, lineHeight: 1.6 } }, "Your brownies are being prepared\nwith love and care 🍫"),
+        React.createElement('button', { className: 'bb-btn-full', onClick: () => { setSubmitted(false); onNav('home'); } }, 'Back to Home')
+      );
+
+      return React.createElement('div', { className: 'screen', style: { paddingBottom: 88 } },
+        // Header
+        React.createElement('div', { style: { background: 'linear-gradient(135deg,#FFF8DC,#FFFEF7)', padding: '20px 16px 12px' } },
+          React.createElement('h2', { className: 'section-title', style: { fontSize: 24, marginBottom: 4 } }, 'Build Your Box'),
+          // Progress
+          React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 } },
+            React.createElement('div', { style: { flex: 1, height: 8, background: 'rgba(139,69,19,.15)', borderRadius: 4, overflow: 'hidden' } },
+              React.createElement('div', { style: { height: '100%', width: `${(total / BOX_SIZE) * 100}%`, background: 'linear-gradient(90deg,#FF8C00,#e67e00)', borderRadius: 4, transition: 'width .3s' } })
+            ),
+            React.createElement('span', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 13, fontWeight: 800, color: total >= BOX_SIZE ? '#FF8C00' : '#8B4513', minWidth: 48, textAlign: 'right' } }, total >= BOX_SIZE ? 'Full! 🎉' : `${total}/${BOX_SIZE}`)
+          ),
+          remaining > 0 && React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 12, color: 'rgba(139,69,19,.6)' } }, `${remaining} more to fill your box`)
+        ),
+
+        // Flavour grid
+        React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, padding: '14px 16px' } },
+          FLAVOURS.map(f =>
+            React.createElement('div', { key: f.id, className: 'flavour-card-mobile', style: { border: quantities[f.id] > 0 ? '2px solid rgba(255,140,0,.5)' : '2px solid transparent' } },
+              React.createElement('div', { style: { position: 'relative', height: 100 } },
+                React.createElement('img', { src: f.img, alt: f.name, style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' } }),
+                quantities[f.id] > 0 && React.createElement('div', { style: { position: 'absolute', top: 7, right: 7, background: 'linear-gradient(135deg,#FF8C00,#e67e00)', color: '#fff', width: 22, height: 22, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Nunito',sans-serif", fontSize: 11, fontWeight: 800 } }, quantities[f.id])
+              ),
+              React.createElement('div', { style: { padding: '9px 10px 12px' } },
+                React.createElement('p', { style: { fontFamily: "'Playfair Display',serif", fontSize: 12, fontWeight: 700, color: '#8B4513', margin: '0 0 8px', lineHeight: 1.2 } }, f.short),
+                React.createElement('div', { style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' } },
+                  React.createElement('button', { className: 'qty-btn', onClick: () => onAddRemove(f.id, -1), disabled: !(quantities[f.id] > 0), style: { width: 28, height: 28, background: quantities[f.id] > 0 ? 'rgba(255,140,0,.12)' : 'rgba(139,69,19,.06)', color: quantities[f.id] > 0 ? '#FF8C00' : '#ccc' } }, '−'),
+                  React.createElement('span', { style: { fontFamily: "'Nunito',sans-serif", fontWeight: 800, fontSize: 16, color: '#8B4513', minWidth: 20, textAlign: 'center' } }, quantities[f.id] || 0),
+                  React.createElement('button', { className: 'qty-btn', onClick: () => onAddRemove(f.id, 1), disabled: remaining <= 0, style: { width: 28, height: 28, background: remaining > 0 ? 'linear-gradient(135deg,#FF8C00,#e67e00)' : '#e8dcc0', color: remaining > 0 ? '#fff' : '#b08060' } }, '+')
+                )
+              )
+            )
+          )
+        ),
+
+        // Floating cart / confirm
+        total > 0 && React.createElement('div', { className: 'floating-cart', onClick: () => total >= BOX_SIZE && setSubmitted(true), style: { background: total >= BOX_SIZE ? 'linear-gradient(135deg,#FF8C00,#e67e00)' : 'linear-gradient(135deg,#8B4513,#654321)' } },
+          React.createElement('div', { style: { display: 'flex', alignItems: 'center', gap: 12 } },
+            React.createElement('div', { style: { background: 'rgba(255,255,255,.2)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' } },
+              React.createElement('i', { className: 'fas fa-shopping-basket', style: { fontSize: 16, color: '#fff' } }),
+              React.createElement('span', { className: 'cart-badge' }, total)
+            ),
+            React.createElement('div', null,
+              React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 14, fontWeight: 800, color: '#fff', margin: 0 } }, total >= BOX_SIZE ? 'Place Order →' : `${remaining} more to go`),
+              cartItems.length > 0 && React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 11, color: 'rgba(255,255,255,.8)', margin: 0 } }, cartItems.slice(0, 2).map(f => f.short).join(', ') + (cartItems.length > 2 ? `…` : ''))
+            )
+          ),
+          total >= BOX_SIZE && React.createElement('div', { style: { background: 'rgba(255,255,255,.25)', borderRadius: 10, padding: '8px 14px' } },
+            React.createElement('span', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 14, fontWeight: 800, color: '#fff' } }, 'Confirm')
+          )
+        )
+      );
+    };
+
+    /* ─── PROFILE / CONTACT SCREEN ─── */
+    const ProfileScreen = () => {
+      const [sent, setSent] = React.useState(false);
+      return React.createElement('div', { className: 'screen', style: { paddingBottom: 80 } },
+        // Top
+        React.createElement('div', { style: { background: 'linear-gradient(135deg,#8B4513,#654321)', padding: '28px 20px 32px', textAlign: 'center' } },
+          React.createElement('img', { src: '../../assets/logo-no-bg.png', alt: 'Logo', style: { width: 72, height: 72, objectFit: 'contain', marginBottom: 10, filter: 'brightness(10)' } }),
+          React.createElement('h2', { style: { fontFamily: "'Playfair Display',serif", fontSize: 22, fontWeight: 700, color: '#FFF8DC', margin: 0 } }, 'Brownie Boo'),
+          React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 13, color: 'rgba(255,248,220,.7)', marginTop: 4 } }, 'Oran, Algérie')
+        ),
+        // Contact info
+        React.createElement('div', { style: { padding: '20px 16px 0' } },
+          [['fas fa-envelope', 'brownieboo@gmail.com', '#FF8C00'], ['fas fa-phone', '0657757691', '#FF8C00'], ['fas fa-map-marker-alt', 'Oran, Algérie', '#FF8C00']].map(([ic, t, c]) =>
+            React.createElement('div', { key: t, style: { display: 'flex', alignItems: 'center', gap: 14, background: '#fff', borderRadius: 14, padding: '14px 16px', marginBottom: 10, boxShadow: '0 3px 12px rgba(139,69,19,.08)' } },
+              React.createElement('div', { style: { width: 38, height: 38, background: 'rgba(255,140,0,.1)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' } },
+                React.createElement('i', { className: ic, style: { color: c, fontSize: 15 } })
+              ),
+              React.createElement('span', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 14, color: '#8B4513', fontWeight: 600 } }, t)
+            )
+          ),
+          // Message form
+          React.createElement('div', { style: { background: '#fff', borderRadius: 20, padding: '20px', boxShadow: '0 6px 20px rgba(139,69,19,.1)', marginTop: 6 } },
+            React.createElement('h4', { style: { fontFamily: "'Playfair Display',serif", fontSize: 18, color: '#8B4513', margin: '0 0 14px' } }, 'Send a Message'),
+            sent
+              ? React.createElement('div', { style: { textAlign: 'center', padding: '20px 0' } },
+                  React.createElement('p', { style: { fontSize: 36, margin: '0 0 8px' } }, '💌'),
+                  React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", color: '#8B4513', fontWeight: 700 } }, "Message sent! We'll reply soon."),
+                  React.createElement('button', { style: { marginTop: 12, background: 'none', border: 'none', color: '#FF8C00', fontFamily: "'Nunito',sans-serif", fontWeight: 700, cursor: 'pointer', fontSize: 14 }, onClick: () => setSent(false) }, 'Send another →')
+                )
+              : React.createElement('form', { onSubmit: e => { e.preventDefault(); setSent(true); } },
+                  ['Name', 'Email', 'Message'].map(field =>
+                    field === 'Message'
+                      ? React.createElement('div', { key: field, style: { marginBottom: 12 } },
+                          React.createElement('label', { style: { display: 'block', fontFamily: "'Nunito',sans-serif", fontSize: 12, fontWeight: 700, color: '#8B4513', marginBottom: 5 } }, field),
+                          React.createElement('textarea', { rows: 3, required: true, placeholder: 'Your message…', style: { width: '100%', padding: '10px 12px', border: '2px solid rgba(139,69,19,.18)', borderRadius: 10, fontFamily: "'Nunito',sans-serif", fontSize: 14, resize: 'none', outline: 'none' } })
+                        )
+                      : React.createElement('div', { key: field, style: { marginBottom: 12 } },
+                          React.createElement('label', { style: { display: 'block', fontFamily: "'Nunito',sans-serif", fontSize: 12, fontWeight: 700, color: '#8B4513', marginBottom: 5 } }, field),
+                          React.createElement('input', { type: field === 'Email' ? 'email' : 'text', required: true, placeholder: `Your ${field.toLowerCase()}`, style: { width: '100%', padding: '10px 12px', border: '2px solid rgba(139,69,19,.18)', borderRadius: 10, fontFamily: "'Nunito',sans-serif", fontSize: 14, outline: 'none' } })
+                        )
+                  ),
+                  React.createElement('button', { type: 'submit', className: 'bb-btn-full', style: { marginTop: 4 } }, 'Send Message')
+                )
+          )
+        )
+      );
+    };
+
+    /* ─── ROOT APP ─── */
+    const NAV_ITEMS = [
+      { id: 'home',     icon: 'fas fa-home',         label: 'Home' },
+      { id: 'flavours', icon: 'fas fa-cookie-bite',   label: 'Flavours' },
+      { id: 'choose',   icon: 'fas fa-box-open',      label: 'Order' },
+      { id: 'order',    icon: 'fas fa-shopping-basket', label: 'Cart' },
+      { id: 'profile',  icon: 'fas fa-envelope',      label: 'Contact' },
+    ];
+
+    const App = () => {
+      const [page, setPage] = React.useState('home');
+      const [quantities, setQuantities] = React.useState({});
+
+      const totalInCart = Object.values(quantities).reduce((s, v) => s + v, 0);
+
+      const handleAddRemove = (id, delta) => {
+        setQuantities(prev => {
+          const cur = prev[id] || 0;
+          const totalCur = Object.values(prev).reduce((s, v) => s + v, 0);
+          if (delta > 0 && totalCur >= BOX_SIZE) return prev;
+          const next = Math.max(0, cur + delta);
+          return { ...prev, [id]: next };
+        });
+      };
+
+      const navigate = (to) => {
+        setPage(to);
+      };
+
+      const renderScreen = () => {
+        switch (page) {
+          case 'home':     return React.createElement(HomeScreen, { onNav: navigate });
+          case 'flavours': return React.createElement(FlavoursScreen, { quantities, onAddRemove: handleAddRemove });
+          case 'choose':   return React.createElement(ChooseScreen, { onNav: navigate });
+          case 'order':    return React.createElement(OrderScreen, { quantities, onAddRemove: handleAddRemove, onNav: navigate });
+          case 'profile':  return React.createElement(ProfileScreen);
+          default:         return React.createElement(HomeScreen, { onNav: navigate });
+        }
+      };
+
+      return React.createElement(IOSDevice, { appName: 'Brownie Boo' },
+        React.createElement('div', { className: 'app-scroll' },
+          renderScreen(),
+          React.createElement('nav', { className: 'bottom-nav' },
+            NAV_ITEMS.map(item =>
+              React.createElement('button', {
+                key: item.id,
+                className: `nav-item ${page === item.id ? 'active' : ''}`,
+                onClick: () => navigate(item.id)
+              },
+                React.createElement('div', { style: { position: 'relative' } },
+                  React.createElement('i', { className: item.icon, style: { fontSize: 20 } }),
+                  item.id === 'order' && totalInCart > 0 && React.createElement('span', { className: 'cart-badge' }, totalInCart)
+                ),
+                React.createElement('span', { className: 'nav-label' }, item.label)
+              )
+            )
+          )
+        )
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+  </script>
+</body>
+</html>
