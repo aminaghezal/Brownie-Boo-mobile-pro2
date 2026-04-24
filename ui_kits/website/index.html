@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brownie Boo — Website UI Kit</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script type="text/babel" src="Header.jsx"></script>
+  <script type="text/babel" src="Hero.jsx"></script>
+  <script type="text/babel" src="FlavourGrid.jsx"></script>
+  <script type="text/babel" src="MenuCards.jsx"></script>
+  <script type="text/babel" src="OrderFlow.jsx"></script>
+  <script type="text/babel" src="Footer.jsx"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Nunito', 'Segoe UI', sans-serif; background: #FFF8DC; overflow-x: hidden; }
+    ::selection { background: rgba(255,140,0,.25); color: #8B4513; }
+    html { scroll-behavior: smooth; }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #FFF8DC; }
+    ::-webkit-scrollbar-thumb { background: #ddcdb9; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const ContactSection = () => {
+      const [sent, setSent] = React.useState(false);
+      return React.createElement('section', {
+        id: 'contact',
+        style: { padding: '80px 0', background: 'linear-gradient(135deg,#FFF8DC,#FFFEF7)' }
+      },
+        React.createElement('div', { style: { maxWidth: 1200, margin: '0 auto', padding: '0 24px' } },
+          React.createElement('div', { style: { textAlign: 'center', marginBottom: 48 } },
+            React.createElement('h3', { style: { fontFamily: "'Playfair Display',serif", fontSize: 38, fontWeight: 700, color: '#8B4513', margin: '0 0 12px' } }, 'Share Your Thoughts'),
+            React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 17, color: 'rgba(139,69,19,.7)' } }, "We'd love to hear from you! Share your feedback or just say hello.")
+          ),
+          React.createElement('div', { style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'start' } },
+            // Form
+            React.createElement('div', {
+              style: { background: '#fff', borderRadius: 24, padding: '32px', boxShadow: '0 10px 30px rgba(139,69,19,.1)' }
+            },
+              sent
+                ? React.createElement('div', { style: { textAlign: 'center', padding: '40px 0' } },
+                    React.createElement('div', { style: { fontSize: 48, marginBottom: 16 } }, '💌'),
+                    React.createElement('h4', { style: { fontFamily: "'Playfair Display',serif", color: '#8B4513', fontSize: 22, marginBottom: 8 } }, 'Message Sent!'),
+                    React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", color: 'rgba(139,69,19,.7)' } }, "Thanks for reaching out. We'll get back to you soon."),
+                    React.createElement('button', { onClick: () => setSent(false), style: { marginTop: 16, background: 'linear-gradient(135deg,#FF8C00,#e67e00)', color: '#fff', border: 'none', borderRadius: 12, padding: '10px 22px', fontFamily: "'Nunito',sans-serif", fontWeight: 700, cursor: 'pointer' } }, 'Send Another')
+                  )
+                : React.createElement('form', {
+                    onSubmit: e => { e.preventDefault(); setSent(true); }
+                  },
+                    React.createElement('h4', { style: { fontFamily: "'Playfair Display',serif", color: '#8B4513', fontSize: 20, marginBottom: 20 } }, 'Get in Touch'),
+                    [['Your Name', 'text', 'Enter your name'], ['Email', 'email', 'Enter your email']].map(([label, type, ph]) =>
+                      React.createElement('div', { key: label, style: { marginBottom: 16 } },
+                        React.createElement('label', { style: { display: 'block', fontFamily: "'Nunito',sans-serif", fontWeight: 700, color: '#8B4513', fontSize: 13, marginBottom: 6 } }, label),
+                        React.createElement('input', { type, placeholder: ph, required: true, style: { width: '100%', padding: '11px 14px', border: '2px solid rgba(139,69,19,.2)', borderRadius: 10, fontFamily: "'Nunito',sans-serif", fontSize: 14, outline: 'none' } })
+                      )
+                    ),
+                    React.createElement('div', { style: { marginBottom: 20 } },
+                      React.createElement('label', { style: { display: 'block', fontFamily: "'Nunito',sans-serif", fontWeight: 700, color: '#8B4513', fontSize: 13, marginBottom: 6 } }, 'Your Message'),
+                      React.createElement('textarea', { rows: 4, placeholder: 'Share your thoughts, feedback, or suggestions…', required: true, style: { width: '100%', padding: '11px 14px', border: '2px solid rgba(139,69,19,.2)', borderRadius: 10, fontFamily: "'Nunito',sans-serif", fontSize: 14, resize: 'none', outline: 'none' } })
+                    ),
+                    React.createElement('button', { type: 'submit', style: { width: '100%', background: 'linear-gradient(135deg,#FF8C00,#e67e00)', color: '#fff', border: 'none', borderRadius: 12, padding: '13px', fontFamily: "'Nunito',sans-serif", fontWeight: 700, fontSize: 15, cursor: 'pointer', boxShadow: '0 4px 15px rgba(255,140,0,.3)' } }, 'Send Message')
+                  )
+            ),
+            // Right side
+            React.createElement('div', null,
+              React.createElement('div', { style: { borderRadius: 20, overflow: 'hidden', marginBottom: 20, boxShadow: '0 10px 30px rgba(139,69,19,.1)' } },
+                React.createElement('img', { src: '../../assets/bakery.png', alt: 'Bakery', style: { width: '100%', height: 240, objectFit: 'cover', display: 'block' } })
+              ),
+              React.createElement('div', { style: { background: '#fff', borderRadius: 20, padding: 24, boxShadow: '0 8px 24px rgba(139,69,19,.08)' } },
+                React.createElement('h4', { style: { fontFamily: "'Playfair Display',serif", color: '#8B4513', fontSize: 18, marginBottom: 16 } }, 'Why Choose Us?'),
+                [
+                  ['fas fa-heart', 'Made with love and premium ingredients'],
+                  ['fas fa-star', 'Consistently rated 5 stars by customers'],
+                  ['fas fa-sparkles', 'Handcrafted in small batches for freshness'],
+                ].map(([icon, text]) =>
+                  React.createElement('div', { key: text, style: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 } },
+                    React.createElement('i', { className: icon, style: { color: '#FF8C00', width: 18 } }),
+                    React.createElement('span', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 14, color: 'rgba(139,69,19,.8)' } }, text)
+                  )
+                )
+              )
+            )
+          )
+        )
+      );
+    };
+
+    const ChoosePage = ({ onNavigate }) => {
+      const boxes = [
+        { title: 'Personalized Box', sub: 'Mix & Match', desc: 'Choose your 6 favourite flavours and build your perfect box.', img: '../../assets/box-classic.jpg', badge: 'Customize', badgeColor: '#FF8C00', page: 'order', features: ['6 brownies of your choice', 'Mix any flavours', 'Perfect for yourself or gifting'] },
+        { title: 'Party Pack', sub: 'Celebrate Big', desc: 'Ideal for events — 30+ brownies to keep the crowd happy.', img: '../../assets/box-party.jpg', badge: 'Celebration', badgeColor: '#32CD32', page: 'order', features: ['30+ assorted brownies', 'Event & party friendly', 'Great value per brownie'] },
+        { title: 'Special Box', sub: 'Premium Gift', desc: 'One large showstopper brownie — perfect for birthdays and romance.', img: '../../assets/box-special.jpg', badge: 'Premium', badgeColor: '#FFD700', page: 'order', features: ['One big premium piece', 'Gift-ready packaging', 'Perfect for occasions'] },
+      ];
+      return React.createElement('div', { style: { background: 'linear-gradient(135deg,#FFF8DC,#FFFEF7)', minHeight: '100vh', padding: '60px 24px' } },
+        React.createElement('div', { style: { maxWidth: 1200, margin: '0 auto' } },
+          React.createElement('button', { onClick: () => onNavigate('home'), style: { background: 'none', border: 'none', color: '#8B4513', fontFamily: "'Nunito',sans-serif", fontWeight: 600, fontSize: 15, cursor: 'pointer', marginBottom: 32, display: 'flex', alignItems: 'center', gap: 6 } }, '← Back'),
+          React.createElement('div', { style: { textAlign: 'center', marginBottom: 52 } },
+            React.createElement('div', { style: { display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,140,0,.13)', color: '#FF8C00', padding: '8px 18px', borderRadius: 25, fontSize: 13, fontWeight: 700, border: '1px solid rgba(255,140,0,.28)', marginBottom: 18 } },
+              React.createElement('i', { className: 'fas fa-sparkles' }), ' Choose Your Box'
+            ),
+            React.createElement('h2', { style: { fontFamily: "'Playfair Display',serif", fontSize: 42, fontWeight: 900, color: '#8B4513', marginBottom: 12 } }, 'What Are You Craving?'),
+            React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 17, color: 'rgba(139,69,19,.7)', maxWidth: 560, margin: '0 auto' } }, 'Pick the box that suits your mood — from personal treats to party-sized celebrations')
+          ),
+          React.createElement('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 28 } },
+            boxes.map(box => React.createElement(ChooseCard, { key: box.title, box, onNavigate }))
+          )
+        )
+      );
+    };
+
+    const ChooseCard = ({ box, onNavigate }) => {
+      const [hov, setHov] = React.useState(false);
+      return React.createElement('div', {
+        onMouseEnter: () => setHov(true), onMouseLeave: () => setHov(false),
+        style: { background: '#fff', borderRadius: 28, overflow: 'hidden', boxShadow: hov ? '0 24px 48px rgba(139,69,19,.2)' : '0 10px 30px rgba(139,69,19,.1)', transform: hov ? 'translateY(-10px) scale(1.02)' : 'none', transition: 'all .4s', cursor: 'pointer', border: '2px solid transparent' }
+      },
+        React.createElement('div', { style: { position: 'relative', padding: '16px 20px', background: 'linear-gradient(135deg,rgba(255,140,0,.05),rgba(139,69,19,.05))', display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+          React.createElement('div', { style: { width: 52, height: 52, background: 'linear-gradient(135deg,#FF8C00,#e67e00)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 22 } }, '🧁'),
+          React.createElement('span', { style: { background: box.badgeColor, color: box.badgeColor === '#FFD700' ? '#8B4513' : '#fff', padding: '5px 12px', borderRadius: 20, fontSize: 11, fontWeight: 700, fontFamily: "'Nunito',sans-serif", textTransform: 'uppercase', letterSpacing: '.04em' } }, box.badge)
+        ),
+        React.createElement('div', { style: { position: 'relative', height: 200, overflow: 'hidden' } },
+          React.createElement('img', { src: box.img, alt: box.title, style: { width: '100%', height: '100%', objectFit: 'cover', transform: hov ? 'scale(1.08)' : 'scale(1)', transition: 'transform .4s', display: 'block' } })
+        ),
+        React.createElement('div', { style: { padding: '24px 24px 28px' } },
+          React.createElement('h3', { style: { fontFamily: "'Playfair Display',serif", fontSize: 22, fontWeight: 700, color: '#8B4513', marginBottom: 4 } }, box.title),
+          React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 12, fontWeight: 700, color: '#FF8C00', textTransform: 'uppercase', letterSpacing: '.05em', marginBottom: 12 } }, box.sub),
+          React.createElement('p', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 14, color: 'rgba(139,69,19,.75)', lineHeight: 1.6, marginBottom: 16 } }, box.desc),
+          box.features.map(f => React.createElement('div', { key: f, style: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, padding: '8px 10px', background: 'rgba(255,140,0,.05)', borderRadius: 10 } },
+            React.createElement('i', { className: 'fas fa-check', style: { color: '#FF8C00', fontSize: 12 } }),
+            React.createElement('span', { style: { fontFamily: "'Nunito',sans-serif", fontSize: 13, color: 'rgba(139,69,19,.8)', fontWeight: 500 } }, f)
+          )),
+          React.createElement('button', { onClick: () => onNavigate(box.page), style: { marginTop: 16, width: '100%', background: 'linear-gradient(135deg,#FF8C00,#e67e00)', color: '#fff', border: 'none', borderRadius: 12, padding: '13px 0', fontFamily: "'Nunito',sans-serif", fontWeight: 700, fontSize: 15, cursor: 'pointer', boxShadow: '0 4px 15px rgba(255,140,0,.3)' } }, 'Choose This Box →')
+        )
+      );
+    };
+
+    const App = () => {
+      const [page, setPage] = React.useState('home');
+
+      const navigate = (to) => {
+        setPage(to);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      const renderPage = () => {
+        if (page === 'order') return React.createElement(OrderFlow, { onNavigate: navigate });
+        if (page === 'choose') return React.createElement(ChoosePage, { onNavigate: navigate });
+
+        return React.createElement('main', null,
+          React.createElement(Hero, { onNavigate: navigate }),
+          React.createElement(FlavourGrid),
+          React.createElement(MenuCards, { onNavigate: navigate }),
+          React.createElement(ContactSection),
+          React.createElement(Footer, { onNavigate: navigate })
+        );
+      };
+
+      const showHeader = page !== 'order';
+
+      return React.createElement('div', null,
+        showHeader && React.createElement(Header, { currentPage: page, onNavigate: navigate }),
+        renderPage()
+      );
+    };
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(App));
+  </script>
+</body>
+</html>
