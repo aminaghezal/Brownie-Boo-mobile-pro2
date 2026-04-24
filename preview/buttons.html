@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+  body { margin: 0; background: #FFF8DC; padding: 24px; font-family: 'Nunito', sans-serif; }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
+  .label { font-size: 10px; font-weight: 700; color: #b08060; text-transform: uppercase; letter-spacing:.06em; margin-bottom: 8px; }
+  .btn { display:inline-flex; align-items:center; gap:6px; border:none; font-family:'Nunito',sans-serif; font-weight:600; cursor:pointer; text-decoration:none; }
+  .primary { background:linear-gradient(135deg,#FF8C00,#e67e00); color:#fff; padding:10px 20px; border-radius:12px; box-shadow:0 4px 15px rgba(255,140,0,.3); font-size:15px; }
+  .primary-lg { background:linear-gradient(135deg,#FF8C00,#e67e00); color:#fff; padding:14px 28px; border-radius:15px; box-shadow:0 4px 15px rgba(255,140,0,.3); font-size:17px; }
+  .primary-sm { background:linear-gradient(135deg,#FF8C00,#e67e00); color:#fff; padding:6px 14px; border-radius:8px; font-size:13px; }
+  .outline { background:transparent; color:#8B4513; border:2px solid #8B4513; padding:10px 20px; border-radius:12px; font-size:15px; }
+  .outline-lg { background:transparent; color:#8B4513; border:2px solid #8B4513; padding:14px 28px; border-radius:15px; font-size:17px; }
+  .disabled { background:#ddcdb9; color:#b08060; padding:10px 20px; border-radius:12px; font-size:15px; cursor:not-allowed; }
+</style></head><body>
+  <div class="label">Primary</div>
+  <div class="row">
+    <button class="btn primary-lg"><i class="fas fa-heart"></i> Make an Order</button>
+    <button class="btn primary">Order Now</button>
+    <button class="btn primary-sm">Add to Box</button>
+  </div>
+  <div class="label">Outline</div>
+  <div class="row">
+    <button class="btn outline-lg">View Menu</button>
+    <button class="btn outline">Learn More</button>
+  </div>
+  <div class="label">Disabled</div>
+  <div class="row">
+    <button class="btn disabled" disabled>Unavailable</button>
+  </div>
+</body></html>

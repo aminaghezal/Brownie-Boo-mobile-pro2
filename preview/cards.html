@@ -1,0 +1,43 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #FFF8DC; padding: 20px; font-family: 'Nunito', sans-serif; }
+  .row { display: flex; gap: 16px; }
+  .card { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 10px 30px rgba(139,69,19,.1); flex: 1; }
+  .card-img { height: 120px; object-fit: cover; width: 100%; display: block; }
+  .card-img-placeholder { height: 120px; background: linear-gradient(135deg,#e8dcc0,#ddcdb9); display:flex;align-items:center;justify-content:center; color:#8B4513;font-size:28px; }
+  .badge { position: absolute; top: 10px; left: 10px; background: #edfd0b; color: #8B4513; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+  .card-body { padding: 14px 16px; }
+  .card-title { font-family: 'Playfair Display', serif; font-weight: 700; color: #8B4513; font-size: 15px; margin-bottom: 4px; }
+  .card-desc { font-size: 11px; color: rgba(139,69,19,.7); line-height: 1.5; }
+  .rel { position: relative; }
+</style></head><body>
+<div class="row">
+  <div class="card">
+    <div class="rel">
+      <img class="card-img" src="../assets/brownie-classic.jpg" alt="Classic">
+      <div class="badge">Popular</div>
+    </div>
+    <div class="card-body">
+      <div class="card-title">Classic Chocolate</div>
+      <div class="card-desc">Rich, fudgy chocolate brownies with premium cocoa</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="rel">
+      <img class="card-img" src="../assets/brownie-caramel.jpg" alt="Caramel">
+    </div>
+    <div class="card-body">
+      <div class="card-title">Salted Caramel</div>
+      <div class="card-desc">Decadent brownies swirled with salted caramel goodness</div>
+    </div>
+  </div>
+  <div class="card" style="border:2px solid #FF8C00;">
+    <div class="card-img-placeholder">🏆</div>
+    <div class="card-body">
+      <div class="card-title">Special Box</div>
+      <div class="card-desc">Featured card variant — orange border highlight</div>
+    </div>
+  </div>
+</div>
+</body></html>

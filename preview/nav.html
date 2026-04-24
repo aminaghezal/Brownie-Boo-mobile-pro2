@@ -1,0 +1,35 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Nunito:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+<style>
+  body { margin: 0; background: #FFF8DC; font-family: 'Nunito', sans-serif; }
+  nav { background: rgba(255,255,255,.95); backdrop-filter: blur(10px);
+    box-shadow: 0 2px 20px rgba(139,69,19,.1); padding: 0 28px; }
+  .inner { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo img { width: 44px; height: 44px; object-fit: contain; }
+  .logo span { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: #8B4513; }
+  .links { display: flex; gap: 28px; }
+  .links a { text-decoration: none; color: #8B4513; font-weight: 600; font-size: 15px; position: relative; padding-bottom: 3px; }
+  .links a.active { color: #FF8C00; }
+  .links a.active::after { content:''; position:absolute; bottom:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,#FF8C00,#e67e00); border-radius:2px; }
+  .btn { background: linear-gradient(135deg,#FF8C00,#e67e00); color: #fff; border: none;
+    padding: 9px 20px; border-radius: 12px; font-family: 'Nunito', sans-serif; font-weight: 700;
+    font-size: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,140,0,.3); }
+</style></head><body>
+<nav>
+  <div class="inner">
+    <div class="logo">
+      <img src="../assets/logo-no-bg.png" alt="Brownie Boo">
+      <span>Brownie Boo</span>
+    </div>
+    <div class="links">
+      <a href="#">Home</a>
+      <a href="#" class="active">Flavours</a>
+      <a href="#">Menu</a>
+      <a href="#">Contact</a>
+    </div>
+    <button class="btn">Order Now</button>
+  </div>
+</nav>
+</body></html>
